@@ -1,0 +1,6 @@
+.d
+.bazel.lock
+bazel-bin
+bazel-microSBE
+bazel-out
+bazel-testlogs

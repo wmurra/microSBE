@@ -1,0 +1,30 @@
+"""
+The main development platforms for this repo are Windows (via WSL) and native Ubuntu.
+The target platform is everywhere! the μSBE kernel is designed to be as portable as possible.
+To support that goal, I’ve found that Uber’s hermetic_cc_toolchain is the easiest way to
+handle cross-platform builds.
+
+It does more than default bazel (esp. on Windows) to isolate the build environment from the 
+host machine and ensure reproducible builds.
+
+So why does it mention Zig below? The zig language is not directly used in this repo, but 
+part of the zig tool chain: zig_cc, is used transitively through hermetic_cc_toolchain.
+Read here about zig-cc: https://andrewkelley.me/post/zig-cc-powerful-drop-in-replacement-gcc-clang.html; 
+"""
+bazel_dep(
+    name = "hermetic_cc_toolchain",
+    version = "4.0.0"
+)
+
+toolchains_ext = use_extension(
+    "@hermetic_cc_toolchain//toolchain:ext.bzl",
+    "toolchains"
+)
+
+toolchains_ext.exec_platform(os = "linux", arch = "arm64")
+
+use_repo(toolchains_ext, "zig_sdk")
+
+register_toolchains(
+    "@zig_sdk//toolchain/..."
+)
