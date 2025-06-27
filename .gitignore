@@ -1,5 +1,5 @@
 .d
-.bazel.lock
+.lock
 bazel-bin
 bazel-microSBE
 bazel-out
