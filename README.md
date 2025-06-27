@@ -16,6 +16,7 @@ The difference between the existing "OTF API" and the usbe api is conceptually s
 ### How to build the rust example implementation [TODO]
 
 ## A note on the style of this repo
+It's also a book.
 This repo is also an experiment in a form of semi-literate programming. Literate programming is one of Donald Knuth's big ideas, and I will not be doing it his way. In Knuthian literate programming the code is expositional literature first and a useful program second. I do not intend this to be amazingly expositional, but there is a mostly-linear way to "read" this repo, and if someone does, I'd be delighted. for more information on this see BOOK.md
 
 ## How to build the book [TODO]
