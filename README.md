@@ -5,7 +5,7 @@ It provides a reflective API (what the SBE wiki calls an OTF API) that is faster
 The difference between the existing "OTF API" and the usbe api is conceptually similar to the difference between a tree-walking-interpreter and a bytecode-executing-vm in interpreted language world. For futher explaination see BOOK.md or book/minitable.md.
 
 ## What is this useful For?:
-μSBE is best suited to embedded usecases examples include:
+μSBE is best suited to embedded usecases, examples include:
 - Wrapping the μSBE kernel in your language of choice to creat a new SBE implementation.
 - Applications that need to process messages but which do not know the schema at compile time (ie network sniffers, node spoofers)
 - Embedded applications without std (bare metal, microcontrollers, no_std Rust)
