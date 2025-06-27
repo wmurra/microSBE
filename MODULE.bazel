@@ -28,3 +28,26 @@ use_repo(toolchains_ext, "zig_sdk")
 register_toolchains(
     "@zig_sdk//toolchain/..."
 )
+
+
+"""
+The SBE code gen tool is written in java and distributed as a .jar file. It will be useful for testing,
+to be able to build stubs in bazel.
+
+http_file is pulling in the jar (the built command line tool) from maven.
+We are also going to pull in the entire SBE repo, so that we can conveniently depend on files from it.
+"""
+http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_file(
+    name = "sbe_tool",
+    urls = ["https://repo1.maven.org/maven2/uk/co/real-logic/sbe-all/1.35.6/sbe-all-1.35.6.jar"],
+    # sha256 = "35384cb335f34506538af2f281b58df7d5153994e2d96447d669e1efc8cb334e",
+)
+
+http_archive(
+    name = "sbe_repo",
+    urls = ["https://github.com/aeron-io/simple-binary-encoding/archive/refs/tags/1.35.6.tar.gz"],
+    build_file = "//external:sbe.BUILD",
+)
