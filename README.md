@@ -2,7 +2,7 @@
 μSBE (sometimes written 'usbe' or microSBE) is a small Simple Binary Encoding implementation written in C99.
 It provides a reflective API (what the SBE wiki calls an OTF API) that is faster, smaller and easier to embed than existing approaches. 
 
-The difference between the existing "OTF API" and the usbe api is conceptually similar to the difference between a tree-walking-interpreter and a bytecode-executing-vm in interpreted language world.
+The difference between the existing "OTF API" and the usbe api is conceptually similar to the difference between a tree-walking-interpreter and a bytecode-executing-vm in interpreted language world. For futher explaination see BOOK.md or book/minitable.md.
 
 ## What is this useful For?:
 μSBE is best suited to embedded usecases examples include:
