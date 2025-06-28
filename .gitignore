@@ -1,6 +1,7 @@
 .d
-.lock
+MODULE.bazel.lock
 bazel-bin
 bazel-microSBE
 bazel-out
 bazel-testlogs
+rust-project.json

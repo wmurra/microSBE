@@ -51,3 +51,27 @@ http_archive(
     urls = ["https://github.com/aeron-io/simple-binary-encoding/archive/refs/tags/1.35.6.tar.gz"],
     build_file = "//external:sbe.BUILD",
 )
+
+
+"""
+rust 
+"""
+bazel_dep(name = "rules_rust", version = "0.57.0")
+
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = "2024",
+    versions = [ "1.85.0" ],
+)
+
+crate = use_extension(
+    "@rules_rust//crate_universe:extension.bzl",
+    "crate"
+)
+
+crate.from_cargo(
+    name = "scratch-crates",
+    cargo_lockfile = "//scratch/sbe_compiled:Cargo.toml"
+)
+
+use_repo(crate, "scratch-crates")

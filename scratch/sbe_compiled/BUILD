@@ -1,15 +1,21 @@
-cc_binary(
-    name = "hello",
-    srcs = ["hello_bazel.c"],
-    copts = [
-        "-std=c99",
-        "-ffreestanding",  # Tells compiler not to assume stdlib
+load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_library")
+
+rust_binary(
+    name = "codec",
+    srcs = ["static_rust_encoder.rs"],
+    deps = [":static_rust_codec"],
+)
+
+rust_library(
+    name = "static_rust_codec",
+    srcs = [
+        ":gen_rust_sbe_example_code",
     ],
 )
 
-
 # This genrule uses the binary @sbe_tool AND the sbe_repo. It points the sbe_tool at the example 
 # files from the sbe_repo builds the necessary rust stubs. 
+
 genrule(
     name = "gen_rust_sbe_example_code",
     srcs = ["@sbe_repo//:example_schema_all", "@sbe_repo//:example_schema_main"],
@@ -34,3 +40,4 @@ genrule(
     $(location @sbe_repo//:example_schema_main)\
     """,
 )
+

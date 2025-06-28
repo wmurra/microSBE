@@ -21,3 +21,16 @@ pretty odd stuff
 I am now going to move on to trying to build a rust project that links in the library that sbe is 
 generating for me then build up a message, spit it out to binary and lastly decode that binary back 
 to a message. 
+
+[NOTE] when I was trying to get this to work I temporarily gave up on hermeticity for the java binary
+as a result if someone else wanted to build they would need to have java installed, not good.
+consider it tech debt, I need to go back and make the java binary part of the hermetic toolchain.
+
+reading the docs for rules_rust I see this rust-analyzer rule and I got excited, definite make 
+sure we set that up so that rust analyzer can work in vscode. 
+
+ok so there is this command
+bazel run @rules_rust//tools/rust_analyzer:gen_rust_project
+I just ran it, I suppose this is gonna create a json
+
+to get the language server to actually work you need to run vscode in wsl and regenerate the json 
