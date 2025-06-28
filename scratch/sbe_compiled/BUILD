@@ -2,7 +2,7 @@ load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_library")
 
 rust_binary(
     name = "codec",
-    srcs = ["static_rust_encoder.rs"],
+    srcs = ["static_rust_example.rs"],
     deps = [":static_rust_codec"],
 )
 
