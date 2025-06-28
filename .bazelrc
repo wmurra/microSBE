@@ -7,3 +7,5 @@ build:win-x64 --platforms=@zig_sdk//platform:windows_amd64
 # $: bazel run --config="win-x64" --run_under="PowerShell.exe" :hello
 # Running this command in wsl builds a windows .exe in linux and then runs it under powershell from
 # wsl, a succinct example of cross compilation.
+
+build --@rules_rust//rust/settings:rustc_output_diagnostics=true --output_groups=+rust_lib_rustc_output,+rust_metadata_rustc_output
