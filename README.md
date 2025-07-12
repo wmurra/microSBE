@@ -22,7 +22,7 @@ This repo is an experiment in a form of semi-literate programming, as well as th
 
 There is a mostly-linear way to "read" this repo, and if someone does that, I'd be delighted. 
 
-The approach was inspired by Crafting Interpreters — but this is not a real book, just an **attempt** at a form of literate programming that you could justifiably do "on the job": code that makes an effort to transfer its theory. For more information on this see BOOK.md
+The approach was inspired by Crafting Interpreters — but this is not a real book, just an **attempt** at a light form of literate programming: code that makes an effort to transfer its theory. For more information on this see BOOK.md
 
 ## How to build the book [TODO]
 
