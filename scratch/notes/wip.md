@@ -26,11 +26,14 @@ to a message.
 as a result if someone else wanted to build they would need to have java installed, not good.
 consider it tech debt, I need to go back and make the java binary part of the hermetic toolchain.
 
-reading the docs for rules_rust I see this rust-analyzer rule and I got excited, definite make 
+reading the docs for rules_rust I see this rust-analyzer rule and I got excited, definitely make 
 sure we set that up so that rust analyzer can work in vscode. 
 
-ok so there is this command
-bazel run @rules_rust//tools/rust_analyzer:gen_rust_project
+There is this command
+```shell
+$: bazel run @rules_rust//tools/rust_analyzer:gen_rust_project
+```
+
 I just ran it, I suppose this is gonna create a json
 
 to get the language server to actually work you need to run vscode in wsl and regenerate the json 
@@ -41,13 +44,13 @@ https://speice.io/2019/09/binary-format-shootout/
 
 https://github.com/speice-io/marketdata-shootout/blob/master/src/sbe_runner.rs
 
-I wasted alot of time, I sort of just starred at the codegened rust code for a while and felt like 
+I wasted a lot of time, I sort of just stared at the code-gen'd rust code for a while and felt like 
 a moron for not knowing how to use it, then I found this: "simple-binary-encoding/rust/benches"
-it's a perfect template example of useing the rust stubs, so I am going to read THIS and it should
+it's a perfect template example of using the rust stubs, so I am going to read THIS and it should
 answer all my questions, the only odd thing is they are using criterion which I assume is a 
 benchmarking lib so I'll just ignore those parts. 
 
-ok so I adapted the benchmark to an example of just using the rust library and it makes alot more 
+ok so I adapted the benchmark to an example of just using the rust library and it makes a lot more 
 sense now
 
 here is an actually good reference for the XML format 

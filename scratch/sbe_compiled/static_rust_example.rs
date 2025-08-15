@@ -1,7 +1,7 @@
 use std::any::Any;
 use std::error::Error;
 
-use static_rust_codec::{
+use rscodec::{
     boolean_type::BooleanType,
     car_codec::{decoder::*, encoder::*},
     message_header_codec::MessageHeaderDecoder,
@@ -10,23 +10,24 @@ use static_rust_codec::{
     *,
 };
 
-use static_rust_codec::car_codec;
-use static_rust_codec::Encoder;
-use static_rust_codec::WriteBuf;
-use static_rust_codec::{SBE_SCHEMA_ID, SBE_SCHEMA_VERSION};
+use rscodec::car_codec;
+use rscodec::Encoder;
+use rscodec::WriteBuf;
+use rscodec::{SBE_SCHEMA_ID, SBE_SCHEMA_VERSION};
 
 fn main() -> Result<(), Box<dyn Error>>{
-    let mut state = State {
-        buffer: vec![0u8; 1024],
-    };
-    let sbe_result = encode(&mut state).ok().ok_or("err")?;
+    let mut buffer: Vec<u8> = vec![0u8; 1024];
 
-    let shortened_state = &state.buffer[..sbe_result];
+    let encoded_length = encode_car(&mut buffer).ok().ok_or("err")?;
+    let shortened_state = &buffer[..encoded_length];
     println!("{:?}", shortened_state);
+
+    let decode_length = decode_car(&buffer)?;
+    println!("{:?}", decode_length);
+
+    println!("{}=={}? {}", encoded_length, decode_length, encoded_length == decode_length);
     Ok(())
 }
-
-// use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 const MANUFACTURER: &str = "MANUFACTURER";
 const MODEL: &str = "MODEL";
@@ -35,9 +36,10 @@ struct State {
     buffer: Vec<u8>,
 }
 
-fn encode(state: &mut State) -> SbeResult<usize> {
-    let buffer = state.buffer.as_mut_slice();
+fn encode_car(buffer: &mut Vec<u8>) -> SbeResult<usize> {
+    let buffer = buffer.as_mut_slice();
     let mut car = CarEncoder::default();
+    println!("car: {:?}", car);
     let mut fuel_figures = FuelFiguresEncoder::default();
     let mut performance_figures = PerformanceFiguresEncoder::default();
     let mut acceleration = AccelerationEncoder::default();
@@ -50,7 +52,7 @@ fn encode(state: &mut State) -> SbeResult<usize> {
     car.model_year(2005);
     car.serial_number(12345);
     car.available(BooleanType::T);
-    car.vehicle_code(&[97, 98, 99, 100, 101, 102]); // abcdef
+    car.vehicle_code(&[b'1', b'2', b'3', b'4', b'5', b'6']); // abcdef
     car.some_numbers(&[0, 1, 2, 3]);
 
     extras.set_sports_pack(true);
@@ -116,6 +118,73 @@ fn encode(state: &mut State) -> SbeResult<usize> {
 
     car.manufacturer(MANUFACTURER);
     car.model(MODEL);
+
+    Ok(car.encoded_length())
+}
+
+
+fn decode_car(buffer: &Vec<u8>) -> SbeResult<usize> {
+    let mut car = CarDecoder::default();
+
+    let buf = ReadBuf::new(buffer.as_slice());
+    let header = MessageHeaderDecoder::default().wrap(buf, 0);
+    car = car.header(header, 0);
+
+    // Car...
+    car.serial_number();
+    car.model_year();
+    car.available();
+    car.code();
+
+    let len = car.some_numbers().len();
+    for i in 0..len {
+        let _ = car.some_numbers()[i];
+    }
+
+    let len = car.vehicle_code().len();
+    for i in 0..len {
+        let _ = car.vehicle_code()[i];
+    }
+
+    let extras = car.extras();
+    extras.get_cruise_control();
+    extras.get_sports_pack();
+    extras.get_sun_roof();
+    println!("{:?}", extras);
+
+    let mut engine = car.engine_decoder();
+    engine.capacity();
+    engine.num_cylinders();
+    engine.max_rpm();
+    engine.manufacturer_code();
+    engine.fuel();
+
+    car = engine.parent()?;
+    let mut fuel_figures = car.fuel_figures_decoder();
+
+    while let Ok(Some(_)) = fuel_figures.advance() {
+        fuel_figures.speed();
+        fuel_figures.mpg();
+    }
+
+    car = fuel_figures.parent()?;
+    let mut performance_figures = car.performance_figures_decoder();
+
+    while let Ok(Some(_)) = performance_figures.advance() {
+        performance_figures.octane_rating();
+        let mut acceleration = performance_figures.acceleration_decoder();
+        while let Ok(Some(_)) = acceleration.advance() {
+            acceleration.mph();
+            acceleration.seconds();
+        }
+        performance_figures = acceleration.parent()?;
+    }
+
+    car = performance_figures.parent()?;
+    let coord = car.manufacturer_decoder();
+    car.manufacturer_slice(coord);
+    let coord = car.model_decoder();
+    car.model_slice(coord);
 
     Ok(car.encoded_length())
 }
