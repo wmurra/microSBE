@@ -10,8 +10,8 @@ The difference between the existing "OTF API" and the usbe api is conceptually s
 ## What is μSBE Useful For?
 μSBE is best suited to embedded use cases, examples include:
 - Wrapping the μSBE kernel in your language of choice to create a new SBE implementation.
-- Applications that need to process messages but which do not know the schema at compile time (e.g., network sniffers, node spoofers)
-- Embedded applications without std (bare metal, microcontrollers, no_std Rust)
+- Applications that need to process messages but which do not know the schema at compile time (e.g., network sniffers / spoofers)
+- Embedded applications without std (bare metal, micro controllers, no_std Rust)
 
 ### How to build the Kernel [TODO]
 ### How to build the python example implementation [TODO]

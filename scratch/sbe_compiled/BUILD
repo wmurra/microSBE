@@ -1,13 +1,19 @@
 load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_library")
 
+# rust_binary(
+#     name = "codec",
+#     srcs = ["static_rust_example.rs"],
+#     deps = [":rscodec"],
+# )
+
 rust_binary(
-    name = "codec",
-    srcs = ["static_rust_encoder.rs"],
-    deps = [":static_rust_codec"],
+    name = "example",
+    srcs = ["static_rust_example.rs"],
+    deps = [":rscodec"],
 )
 
 rust_library(
-    name = "static_rust_codec",
+    name = "rscodec",
     srcs = [
         ":gen_rust_sbe_example_code",
     ],
